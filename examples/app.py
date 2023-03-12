@@ -124,46 +124,46 @@ from invenio_webhooks.views import blueprint as webhooks_blueprint
 from invenio_github import InvenioGitHub
 from invenio_github.views import github
 
-app = Flask('exampleapp')
+app = Flask("exampleapp")
 app.config.update(
     CELERY_ALWAYS_EAGER=True,
-    CELERY_CACHE_BACKEND='memory',
+    CELERY_CACHE_BACKEND="memory",
     CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-    CELERY_RESULT_BACKEND='cache',
+    CELERY_RESULT_BACKEND="cache",
     GITHUB_INSECURE_SSL=True,
-    GITHUB_SHIELDSIO_BASE_URL='http://example.org/badge/',
+    GITHUB_SHIELDSIO_BASE_URL="http://example.org/badge/",
     GITHUB_APP_CREDENTIALS=dict(
-        consumer_key=os.getenv('GITHUB_KEY', 'changeme'),
-        consumer_secret=os.getenv('GITHUB_SECRET', 'changeme'),
+        consumer_key=os.getenv("GITHUB_KEY", "changeme"),
+        consumer_secret=os.getenv("GITHUB_SECRET", "changeme"),
     ),
     LOGIN_DISABLED=False,
     OAUTHLIB_INSECURE_TRANSPORT=True,
-    OAUTH2_CACHE_TYPE='simple',
+    OAUTH2_CACHE_TYPE="simple",
     OAUTHCLIENT_REMOTE_APPS=dict(
         github=REMOTE_APP,
     ),
-    SECRET_KEY='test_key',
+    SECRET_KEY="test_key",
     SQLALCHEMY_TRACK_MODIFICATIONS=True,
-    SQLALCHEMY_DATABASE_URI=os.getenv('SQLALCHEMY_DATABASE_URI',
-                                      'sqlite:///test.db'),
-    SECURITY_PASSWORD_HASH='plaintext',
-    SECURITY_PASSWORD_SCHEMES=['plaintext'],
+    SQLALCHEMY_DATABASE_URI=os.getenv("SQLALCHEMY_DATABASE_URI", "sqlite:///test.db"),
+    SECURITY_PASSWORD_HASH="plaintext",
+    SECURITY_PASSWORD_SCHEMES=["plaintext"],
     SECURITY_DEPRECATED_PASSWORD_SCHEMES=[],
     TESTING=True,
     WTF_CSRF_ENABLED=False,
 )
 
-app.config['OAUTHCLIENT_REMOTE_APPS']['github']['params'][
-    'request_token_params']['scope'] = 'user:email,admin:repo_hook,read:org'
+app.config["OAUTHCLIENT_REMOTE_APPS"]["github"]["params"]["request_token_params"][
+    "scope"
+] = "user:email,admin:repo_hook,read:org"
 
-ULTRAHOOK_NAME = os.getenv('ULTRAHOOK_NAME')
+ULTRAHOOK_NAME = os.getenv("ULTRAHOOK_NAME")
 if ULTRAHOOK_NAME:
-    app.config['WEBHOOKS_DEBUG_RECEIVER_URLS'] = dict(
-        github='http://github.{name}.ultrahook.com/?'
-               'access_token=%(token)s'.format(name=ULTRAHOOK_NAME),
+    app.config["WEBHOOKS_DEBUG_RECEIVER_URLS"] = dict(
+        github="http://github.{name}.ultrahook.com/?"
+        "access_token=%(token)s".format(name=ULTRAHOOK_NAME),
     )
 
-app.url_map.converters['pid'] = PIDConverter
+app.url_map.converters["pid"] = PIDConverter
 
 celeryext = FlaskCeleryExt(app)
 Babel(app)
